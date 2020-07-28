@@ -1,13 +1,20 @@
-# 使用方法
-> 使用 `touchstart` 事件，自定义键盘只支持移动端
-> PC 端采用 input 输入框，输入时会触发 `key-click` ，按下回车会触发 `done`
+# Use `input-plate-number`
+> 
+> 因为是使用的 `touch` 事件，所以目前自定义车牌键盘只支持移动端使用
+> 
+> PC 端则采用 `input` 输入框的形式用于处理用户输入车牌
+
+![input-plate-number](https://cabin-cdn.oss-cn-hangzhou.aliyuncs.com/video/input-plate-number.gif)
  
 ## 安装
 ```
 yarn add input-plate-number  // npm install --save input-plate-number 
 ```
 
-## 在 Vue 项目中使用
+## 使用
+>
+> 因为是基于 `Vue` 开发的组件库，所以只支持在 `Vue` 项目中使用
+> 
 ```ecmascript 6
 // main.js
 import InputPlateNumber from 'input-plate-number';
@@ -15,60 +22,40 @@ import 'input-plate-number/lib/input-plate-number.css'
 
 Vue.use(InputPlateNumber)
 ```
-模板中
 ```vue
-  <input-plate-number @done="handleDone">
-    // slot 可选  default/header
-  </input-plate-number>
+  <!-- template -->
+  <input-plate-number></input-plate-number>
 ```
-```vue
-  methods: {
-    /**
-     * 车牌输入完成自动触发
-     * @param isPlateNum 是否符合车牌规则
-     * @param plateNum 返回的车牌
-     * @param cb  回调函数 输入完成后关闭键盘- 可选
-     */
-    handleDone ({ isPlateNum, plateNum }, cb) {
-      console.log(isPlateNum)
-      console.log(plateNum)
-      cb && cb()
-    },
-    /**
-     * 按下的字符的时候触发 可选
-     * @param key 实时按下的文字
-     * @param plateNum 实时按下的车牌
-     */
-    handleKeyClick ({ key, plateNum }) {
-      console.log(key, plateNum)
-    }
-  }
-```
-
 
 ## API
 
 ### slot 
-|          参数        |              说明               | 
-| :------------------ | :---------------------------- |
-|      default        |      可在组件中body填充          |   
-|      header         |    可在组件中输入框中进行填充      |
+|          参数        |              说明             | 
+| :------------------ | :--------------------------- |
+|      default        |      组件中 body 中自定义内容         |   
+|      header         |    组件头部进行自定义内容     |
+
 
 ### props 传入参数
-|          参数         |              说明               |   类型      | 默认值   |
-| :------------------ | :---------------------------- | :-------  | :----- |
-|      wrap-class      |       最外部的class名字          | `String`   |    -    |
-| default-plate-number |        初始化时展示的车牌        | `String`   |   浙B    |
-|   keyboard-visible   | 是否显示自定义键盘  支持 .sync   | `Boolean`  | `true`   |
-|        energy        | 是否打开新能源开关  支持 .sync  | `Boolean`  | `false`  |
-|        isNoCar        | 是否打开无牌车适配    | `Boolean`  | `false`  |
+|        参数         |          说明        |   类型      | 默认值   |
+| :------------------| :----------------------- | :-------  | :----- |
+|    wrapClass       |   最外层的 className     | `String`   |    -    |
+| defaultPlateNumber |  初始化时展示的车牌        | `String`   |   浙B    |
+|   keyboardVisible  | 是否显示自定义键盘 .sync   | `Boolean`  | `true`   |
+|        energy      | 是否打开新能源开关 .sync  | `Boolean`  | `false`  |
+|        isNoCar     | 是否打开无牌车适配        | `Boolean`  | `false`  |
+
 
 #### Events
 |  事件名   |                             说明                             |                  回调函数                  |
 | :------- | :------------------------ | :---------------------------------------- |
 |   done    | 输入完成后触发 (移动端输入完成后则自动触发， PC 端需要按下回车键触发) | `{ isPlateNum: Boolean,plateNum: String }` |
 | key-click | 输入时触发 (移动端触摸自定义车牌键盘触发， PC 端输入框输入时自动触发) |    `{ curKey: String, plateNum: String }`     |
-| del-click | 删除时触发 （移动端触摸自定义删除键触发，PC 端按下 `Backspace` 回退键触发） |        `{  plateNum: String }`       |
+| del-click | 删除时触发 （移动端触摸自定义删除键触发，PC 端按下 `Backspace` 回退键时触发） |        `{  plateNum: String }`       |
 | inp-click |                移动端触摸上方输入框的时候触发                |           `{  curIdx: Number, plateNum: String }`           |
 |   close   |                  移动端关闭自定义键盘时触发                  |                    `-`                     |
 
+
+
+## 注意事项
+* 如果要更改默认车牌应在 `created` 生命周期中进行处理，否则需要利用组件 `key` 特性进行重新渲染才会生效
