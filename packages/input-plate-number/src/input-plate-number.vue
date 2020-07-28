@@ -1,176 +1,174 @@
 <template>
-  <div id="app">
-    <div class="keyboard" :class="wrapClass">
-      <div class="keyboard-input">
-        <div
-          class="keyboard-input__item"
-          :class="[
-            curKeyIdx === idx + 1 && 'keyboard-input__active ignore-height',
-            idx === 7 && 'keyboard-input__energy'
-          ]"
-          v-for="(item, idx) in inputs"
-          :key="idx"
-          @touchstart="handleInpTouch(idx)"
-        >
-          {{ item }}
-          <i v-show="idx === 7" class="keyboard-input__energy--icon"></i>
+  <div class="keyboard" :class="wrapClass">
+    <div class="keyboard-input">
+      <div
+        class="keyboard-input__item"
+        :class="[
+          curKeyIdx === idx + 1 && 'keyboard-input__active ignore-height',
+          idx === 7 && 'keyboard-input__energy'
+        ]"
+        v-for="(item, idx) in inputs"
+        :key="idx"
+        @touchstart="handleInpTouch(idx)"
+      >
+        {{ item }}
+        <i v-show="idx === 7" class="keyboard-input__energy--icon"></i>
+      </div>
+    </div>
+
+    <div class="keyboard-content" v-show="keyboardVisible">
+      <div class="keyboard-bar">
+        <div class="keyboard-bar__close" @touchstart="handleClose">
+          <i class="keyboard-bar__close--icon"></i>
+          <span class="keyboard-bar__close--label">关闭</span>
+        </div>
+        <label class="keyboard-bar__switch">
+          <span class="keyboard-bar__switch--label">新能源</span>
+          <input
+            v-model="isEnergy"
+            @change="handleEnergyChange"
+            type="checkbox"
+            class="keyboard-switch keyboard-switch--animation"
+          />
+        </label>
+      </div>
+      <div class="keyboard-prefix" v-if="curKeyIdx === 1">
+        <div class="keyboard-row">
+          <div
+            class="keyboard-key"
+            @touchstart="handleKeyTouchStart(key, $event)"
+            @touchend="handleKeyTouchEnd"
+            v-for="key in provinceData1"
+            :key="key"
+          >
+            <span class="keyboard-key__txt">{{ key }}</span>
+          </div>
+        </div>
+        <div class="keyboard-row">
+          <div
+            class="keyboard-key"
+            @touchstart="handleKeyTouchStart(key, $event)"
+            @touchend="handleKeyTouchEnd"
+            v-for="key in provinceData2"
+            :key="key"
+          >
+            <span class="keyboard-key__txt">{{ key }}</span>
+          </div>
+        </div>
+        <div class="keyboard-row">
+          <div class="keyboard-key keyboard-key__empty-small">
+            <span class="keyboard-key__txt"></span>
+          </div>
+          <div
+            class="keyboard-key"
+            @touchstart="handleKeyTouchStart(key, $event)"
+            @touchend="handleKeyTouchEnd"
+            v-for="key in provinceData3"
+            :key="key"
+          >
+            <span class="keyboard-key__txt">{{ key }}</span>
+          </div>
+          <div class="keyboard-key keyboard-key__empty-small">
+            <span class="keyboard-key__txt"></span>
+          </div>
+        </div>
+        <div class="keyboard-row">
+          <div class="keyboard-key keyboard-key__empty">
+            <span class="keyboard-key__txt"></span>
+          </div>
+          <div
+            class="keyboard-key"
+            @touchstart="handleKeyTouchStart(key, $event)"
+            @touchend="handleKeyTouchEnd"
+            v-for="key in provinceData4"
+            :key="key"
+          >
+            <span class="keyboard-key__txt">{{ key }}</span>
+          </div>
+          <div
+            class="keyboard-key keyboard-key__del"
+            @touchstart="handleDelTouch"
+          >
+            <span class="keyboard-key__txt"></span>
+          </div>
+          <div class="keyboard-key keyboard-key__empty">
+            <span class="keyboard-key__txt"></span>
+          </div>
         </div>
       </div>
-
-      <div class="keyboard-content" v-show="keyboardVisible">
-        <div class="keyboard-bar">
-          <div class="keyboard-bar__close" @touchstart="handleClose">
-            <i class="keyboard-bar__close--icon"></i>
-            <span class="keyboard-bar__close--label">关闭</span>
-          </div>
-          <label class="keyboard-bar__switch">
-            <span class="keyboard-bar__switch--label">新能源</span>
-            <input
-              v-model="isNewEnergy"
-              @change="handleEnergyChange"
-              type="checkbox"
-              class="keyboard-switch keyboard-switch--animation"
-            />
-          </label>
-        </div>
-        <div class="keyboard-prefix" v-if="curKeyIdx === 1">
-          <div class="keyboard-row">
-            <div
-              class="keyboard-key"
-              @touchstart="handleKeyTouchStart(key, $event)"
-              @touchend="handleKeyTouchEnd"
-              v-for="key in provinceData1"
-              :key="key"
-            >
-              <span class="keyboard-key__txt">{{ key }}</span>
-            </div>
-          </div>
-          <div class="keyboard-row">
-            <div
-              class="keyboard-key"
-              @touchstart="handleKeyTouchStart(key, $event)"
-              @touchend="handleKeyTouchEnd"
-              v-for="key in provinceData2"
-              :key="key"
-            >
-              <span class="keyboard-key__txt">{{ key }}</span>
-            </div>
-          </div>
-          <div class="keyboard-row">
-            <div class="keyboard-key keyboard-key__empty-small">
-              <span class="keyboard-key__txt"></span>
-            </div>
-            <div
-              class="keyboard-key"
-              @touchstart="handleKeyTouchStart(key, $event)"
-              @touchend="handleKeyTouchEnd"
-              v-for="key in provinceData3"
-              :key="key"
-            >
-              <span class="keyboard-key__txt">{{ key }}</span>
-            </div>
-            <div class="keyboard-key keyboard-key__empty-small">
-              <span class="keyboard-key__txt"></span>
-            </div>
-          </div>
-          <div class="keyboard-row">
-            <div class="keyboard-key keyboard-key__empty">
-              <span class="keyboard-key__txt"></span>
-            </div>
-            <div
-              class="keyboard-key"
-              @touchstart="handleKeyTouchStart(key, $event)"
-              @touchend="handleKeyTouchEnd"
-              v-for="key in provinceData4"
-              :key="key"
-            >
-              <span class="keyboard-key__txt">{{ key }}</span>
-            </div>
-            <div
-              class="keyboard-key keyboard-key__del"
-              @touchstart="handleDelTouch"
-            >
-              <span class="keyboard-key__txt"></span>
-            </div>
-            <div class="keyboard-key keyboard-key__empty">
-              <span class="keyboard-key__txt"></span>
-            </div>
+      <div class="keyboard-suffix" v-else>
+        <div class="keyboard-row">
+          <div
+            class="keyboard-key"
+            :class="[curKeyIdx === 2 && 'keyboard-key__disabled']"
+            @touchstart="handleKeyTouchStart(key, $event)"
+            @touchend="handleKeyTouchEnd"
+            v-for="key in keyboardData1"
+            :key="key"
+          >
+            <span class="keyboard-key__txt">{{ key }}</span>
           </div>
         </div>
-        <div class="keyboard-suffix" v-else>
-          <div class="keyboard-row">
-            <div
-              class="keyboard-key"
-              :class="[curKeyIdx === 2 && 'keyboard-key__disabled']"
-              @touchstart="handleKeyTouchStart(key, $event)"
-              @touchend="handleKeyTouchEnd"
-              v-for="key in keyboardData1"
-              :key="key"
-            >
-              <span class="keyboard-key__txt">{{ key }}</span>
-            </div>
-          </div>
-          <div class="keyboard-row">
-            <div
-              class="keyboard-key"
-              :class="[isLiterCom(key) && 'keyboard-key__disabled']"
-              @touchstart="handleKeyTouchStart(key, $event)"
-              @touchend="handleKeyTouchEnd"
-              v-for="key in keyboardData2"
-              :key="key"
-            >
-              <span class="keyboard-key__txt">{{ key }}</span>
-            </div>
-          </div>
-          <div class="keyboard-row">
-            <div
-              class="keyboard-key"
-              :class="[isLiterCom(key) && 'keyboard-key__disabled']"
-              @touchstart="handleKeyTouchStart(key, $event)"
-              @touchend="handleKeyTouchEnd"
-              v-for="key in keyboardData3"
-              :key="key"
-            >
-              <span class="keyboard-key__txt">{{ key }}</span>
-            </div>
-          </div>
-          <div class="keyboard-row">
-            <div
-              class="keyboard-key"
-              :class="[isLiterCom(key) && 'keyboard-key__disabled']"
-              @touchstart="handleKeyTouchStart(key, $event)"
-              @touchend="handleKeyTouchEnd"
-              v-for="key in keyboardData4"
-              :key="key"
-            >
-              <span class="keyboard-key__txt">{{ key }}</span>
-            </div>
-            <div @click="handleDelTouch" class="keyboard-key keyboard-key__del">
-              <span class="keyboard-key__txt"></span>
-            </div>
+        <div class="keyboard-row">
+          <div
+            class="keyboard-key"
+            :class="[isLiterCom(key) && 'keyboard-key__disabled']"
+            @touchstart="handleKeyTouchStart(key, $event)"
+            @touchend="handleKeyTouchEnd"
+            v-for="key in keyboardData2"
+            :key="key"
+          >
+            <span class="keyboard-key__txt">{{ key }}</span>
           </div>
         </div>
-        <div
-          class="keyboard-key__hover"
-          v-show="keyHover"
-          :style="{ top: keyHoverY + 'px', left: keyHoverX + 'px' }"
-        >
-          {{ keyVal }}
+        <div class="keyboard-row">
+          <div
+            class="keyboard-key"
+            :class="[isLiterCom(key) && 'keyboard-key__disabled']"
+            @touchstart="handleKeyTouchStart(key, $event)"
+            @touchend="handleKeyTouchEnd"
+            v-for="key in keyboardData3"
+            :key="key"
+          >
+            <span class="keyboard-key__txt">{{ key }}</span>
+          </div>
         </div>
+        <div class="keyboard-row">
+          <div
+            class="keyboard-key"
+            :class="[isLiterCom(key) && 'keyboard-key__disabled']"
+            @touchstart="handleKeyTouchStart(key, $event)"
+            @touchend="handleKeyTouchEnd"
+            v-for="key in keyboardData4"
+            :key="key"
+          >
+            <span class="keyboard-key__txt">{{ key }}</span>
+          </div>
+          <div @click="handleDelTouch" class="keyboard-key keyboard-key__del">
+            <span class="keyboard-key__txt"></span>
+          </div>
+        </div>
+      </div>
+      <div
+        class="keyboard-key__hover"
+        v-show="keyHover"
+        :style="{ top: keyHoverY + 'px', left: keyHoverX + 'px' }"
+      >
+        {{ keyVal }}
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { isNumber, isLiter, isPlateNum } from "./utils/reg";
-import { getVertexPosition } from "./utils";
+import { isLiter, isNumber, isPlateNum } from "../../utils/reg";
+import { getVertexPosition } from "../../utils";
 
 export default {
-  name: "App",
+  name: "input-plate-number",
   props: {
     wrapClass: String,
-    defaultPlateNum: {
+    defaultPlateNumber: {
       type: String,
       default: "浙B"
     },
@@ -207,7 +205,7 @@ export default {
       keyHover: false,
       canKeyClick: true, // 只能点击一次
       keyVal: "",
-      isNewEnergy: false, // 是否新能源
+      isEnergy: false, // 是否新能源
       inputs: Array(7).fill(""),
       keyboardVisible: true
     };
@@ -220,16 +218,12 @@ export default {
     }
   },
   watch: {
-    isNewEnergy(val) {
+    isEnergy(val) {
       if (val) {
-        if (this.inputs[this.curKeyIdx - 1]) {
-          this.curKeyIdx++;
-        }
+        if (this.inputs[this.curKeyIdx - 1]) { this.curKeyIdx++; }
         this.inputs.push("");
       } else {
-        if (this.curKeyIdx === 8) {
-          this.curKeyIdx = 7;
-        }
+        if (this.curKeyIdx === 8) { this.curKeyIdx = 7; }
         this.inputs.pop();
       }
     }
@@ -241,20 +235,16 @@ export default {
       this.keyboardVisible = true;
     },
     handleEnergyChange() {
-      this.$emit("update:energy", this.isNewEnergy);
+      this.$emit("update:energy", this.isEnergy);
     },
     handleKeyTouchStart(key, e) {
-      if (!this.canKeyClick) {
-        return;
-      }
+      if (!this.canKeyClick) { return; }
       this.canKeyClick = false;
 
-      if (this.curKeyIdx === 2 && isNumber(key)) {
-        return;
-      }
-      if (isLiter(key) && this.curKeyIdx !== 7 && this.curKeyIdx !== 1) {
-        return;
-      }
+      // 第二位数字不能点击
+      if (this.curKeyIdx === 2 && isNumber(key)) { return; }
+      // 车牌出去了第一位省份 以及普通车牌最后一位 其它中文文字不能点击
+      if (isLiter(key) && this.curKeyIdx !== 7 && this.curKeyIdx !== 1) { return; }
 
       this.keyHover = true;
       let { top, left } = getVertexPosition(e.target);
@@ -269,15 +259,22 @@ export default {
       }
 
       if (
-        (!this.isNewEnergy && this.curKeyIdx === 7) ||
-        (this.isNewEnergy && this.curKeyIdx === 8)
+        (!this.isEnergy && this.curKeyIdx === 7) ||
+        (this.isEnergy && this.curKeyIdx === 8)
       ) {
         this.keyVal = key;
         this.$set(this.inputs, this.curKeyIdx - 1, key);
-        console.log(this.inputs);
-        this.$emit("done", { plateNumAry: this.inputs, isPlateNum: isPlateNum(this.inputs.join()) }, () => {
-          this.keyboardVisible = false
-        });
+        const plateNum = this.inputs.join("");
+        this.$emit(
+          "done",
+          {
+            isPlateNum: isPlateNum(plateNum),
+            plateNum
+          },
+          () => {
+            this.keyboardVisible = false;
+          }
+        );
         return;
       }
 
@@ -306,16 +303,12 @@ export default {
     }
   },
   created() {
-    this.isNewEnergy = this.energy;
-    console.log(this.defaultPlateNum.split(''));
-    this.defaultPlateNum.split('').forEach((item, idx) => {
-      console.log(item, idx);
-      this.inputs[idx] = item
+    this.inputs = this.inputs.map((item, idx) => {
+      item = this.defaultPlateNumber[idx]
+      return item
     })
-    this.curKeyIdx = this.defaultPlateNum.length + 1
-    if (this.energy) {
-      this.inputs.push("");
-    }
+    this.curKeyIdx = this.defaultPlateNumber.length + 1;
+    this.isEnergy = this.energy;
   }
 };
 </script>

@@ -1,29 +1,60 @@
-# keyboard
+# input-plate-number (车牌键盘输入组件)
+### 安装
+```shell script
+yarn add input-plate-number // npm install input-plate-number --save
+```
+### 使用
+```javascript
+// main.js
+import InputPlateNumber from 'input-plate-number';
+import 'input-plate-number/lib/input-plate-number.css'
 
-## Project setup
+Vue.use(InputPlateNumber)
 ```
-yarn install
-```
-
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Run your unit tests
-```
-yarn test:unit
+#### 页面中使用
+```vue
+  <input-plate-number @done="handleDone" ></input-plate-number>
 ```
 
-### Lints and fixes files
-```
-yarn lint
+#### props 传入参数
+```vue
+  props: {
+    wrapClass: String, // 最外部的 class 名字 
+    defaultPlateNumber: { // 初始车牌  默认 浙B
+      type: String,
+      default: "浙B"
+    },
+    energy: { // 是否是新能源 支持 .sync
+      type: Boolean,
+      default: false
+    }
+  }
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+#### 回调函数
+> @done 输入完成后触发
+> @key-click 按下按键之后触发  
+> @del-click 按下删除按钮的时候触发 可选  
+> @close 按下关闭的时候触发
+```vue
+  methods: {
+    /**
+     * 车牌输入完成自动触发
+     * @param isPlateNum 是否符合车牌规则
+     * @param plateNum 返回的车牌
+     * @param cb  回调函数 输入完成后关闭键盘- 可选
+     */
+    handleDone ({ isPlateNum, plateNum }, cb) {
+      console.log(isPlateNum)
+      console.log(plateNum)
+      cb && cb()
+    },
+    /**
+     * 按下的字符的时候触发 可选
+     * @param key 实时按下的文字
+     */
+    handleKeyClick (key) {
+      console.log(key)
+    }
+  }
+```
