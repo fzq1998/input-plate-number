@@ -13,7 +13,9 @@ Vue.use(InputPlateNumber)
 ```
 #### 页面中使用
 ```vue
-  <input-plate-number @done="handleDone" ></input-plate-number>
+  <input-plate-number @done="handleDone">
+    // slot 可选  
+  </input-plate-number>
 ```
 
 #### props 传入参数
@@ -23,6 +25,10 @@ Vue.use(InputPlateNumber)
     defaultPlateNumber: { // 初始车牌  默认 浙B
       type: String,
       default: "浙B"
+    },
+    keyboardVisible: { // 是否是显示键盘 支持 .sync
+      type: Boolean,
+      default: true
     },
     energy: { // 是否是新能源 支持 .sync
       type: Boolean,

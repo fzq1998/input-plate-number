@@ -15,11 +15,13 @@
         <i v-show="idx === 7" class="keyboard-input__energy--icon"></i>
       </div>
     </div>
-
-    <div class="keyboard-content" v-show="keyboardVisible">
+    <slot></slot>
+    <div class="keyboard-content" v-show="innerKeyboardVisible">
       <div class="keyboard-bar">
-        <div class="keyboard-bar__close" @touchstart="handleClose">
-          <i class="keyboard-bar__close--icon"></i>
+        <div class="keyboard-bar__close" @touchstart="handleCloseKeyboard">
+          <span class="keyboard-bar__close--icon">
+            <i class="icon"></i>
+          </span>
           <span class="keyboard-bar__close--label">关闭</span>
         </div>
         <label class="keyboard-bar__switch">
@@ -172,6 +174,10 @@ export default {
       type: String,
       default: "浙B"
     },
+    keyboardVisible: {
+      type: Boolean,
+      default: true
+    },
     energy: {
       type: Boolean,
       default: false
@@ -207,7 +213,7 @@ export default {
       keyVal: "",
       isEnergy: false, // 是否新能源
       inputs: Array(7).fill(""),
-      keyboardVisible: true
+      innerKeyboardVisible: true
     };
   },
   computed: {
@@ -220,31 +226,40 @@ export default {
   watch: {
     isEnergy(val) {
       if (val) {
-        if (this.inputs[this.curKeyIdx - 1]) { this.curKeyIdx++; }
+        if (this.inputs[this.curKeyIdx - 1]) {
+          this.curKeyIdx++;
+        }
         this.inputs.push("");
       } else {
-        if (this.curKeyIdx === 8) { this.curKeyIdx = 7; }
+        if (this.curKeyIdx === 8) {
+          this.curKeyIdx = 7;
+        }
         this.inputs.pop();
       }
     }
   },
   methods: {
     handleInpTouch(idx) {
-      // 点击头部显示
       this.curKeyIdx = idx + 1;
-      this.keyboardVisible = true;
+      this.innerKeyboardVisible = true;
     },
     handleEnergyChange() {
       this.$emit("update:energy", this.isEnergy);
     },
     handleKeyTouchStart(key, e) {
-      if (!this.canKeyClick) { return; }
+      if (!this.canKeyClick) {
+        return;
+      }
       this.canKeyClick = false;
 
       // 第二位数字不能点击
-      if (this.curKeyIdx === 2 && isNumber(key)) { return; }
+      if (this.curKeyIdx === 2 && isNumber(key)) {
+        return;
+      }
       // 车牌出去了第一位省份 以及普通车牌最后一位 其它中文文字不能点击
-      if (isLiter(key) && this.curKeyIdx !== 7 && this.curKeyIdx !== 1) { return; }
+      if (isLiter(key) && this.curKeyIdx !== 7 && this.curKeyIdx !== 1) {
+        return;
+      }
 
       this.keyHover = true;
       let { top, left } = getVertexPosition(e.target);
@@ -272,7 +287,7 @@ export default {
             plateNum
           },
           () => {
-            this.keyboardVisible = false;
+            this.innerKeyboardVisible = false;
           }
         );
         return;
@@ -297,18 +312,22 @@ export default {
       this.curKeyIdx--;
       this.$emit("del-click", {});
     },
+    handleCloseKeyboard () {
+      this.handleClose()
+      this.$emit("close", this.innerKeyboardVisible);
+    },
     handleClose() {
-      this.keyboardVisible = false;
-      this.$emit("close", this.keyboardVisible);
+      this.innerKeyboardVisible = false;
     }
   },
   created() {
-    this.inputs = this.inputs.map((item, idx) => {
-      item = this.defaultPlateNumber[idx]
-      return item
-    })
-    this.curKeyIdx = this.defaultPlateNumber.length + 1;
     this.isEnergy = this.energy;
+    this.innerKeyboardVisible = this.keyboardVisible
+    this.inputs = this.inputs.map((item, idx) => {
+      item = this.defaultPlateNumber[idx];
+      return item;
+    });
+    this.curKeyIdx = this.defaultPlateNumber.length + 1;
   }
 };
 </script>
@@ -374,10 +393,8 @@ export default {
     box-shadow: 0 -1px 2px #e9e9e9;
   }
   &-bar {
-    line-height: 90px;
     font-size: 0;
     color: #808388;
-    text-align: right;
     background-color: #fff;
     display: flex;
     justify-content: space-between;
@@ -387,27 +404,33 @@ export default {
     &__close {
       $iconWidth: 28px;
       $iconHeight: 4px;
+
       height: 90px;
       line-height: 90px;
+      display: flex;
+      align-items: center;
 
       &--icon {
-        display: inline-block;
-        vertical-align: middle;
-        width: $iconWidth;
-        height: $iconHeight;
-        background: #3092ff;
-        transform: rotate(45deg);
-        position: relative;
-        margin-right: 10px;
-
-        &::after {
-          content: "";
+        height: 90px;
+        i.icon {
+          display: inline-block;
+          vertical-align: middle;
           width: $iconWidth;
           height: $iconHeight;
           background: #3092ff;
-          transform: rotate(90deg);
-          position: absolute;
-          left: 0;
+          transform: rotate(45deg);
+          position: relative;
+          margin-right: 10px;
+
+          &::after {
+            content: "";
+            width: $iconWidth;
+            height: $iconHeight;
+            background: #3092ff;
+            transform: rotate(90deg);
+            position: absolute;
+            left: 0;
+          }
         }
       }
       &--label {
@@ -421,7 +444,6 @@ export default {
 
     &__switch {
       height: 90px;
-      line-height: 90px;
       display: flex;
       align-items: center;
 
@@ -429,7 +451,7 @@ export default {
         height: 90px;
         line-height: 90px;
         font-size: 24px;
-        margin-right: 5px;
+        margin-right: 10px;
         display: inline-block;
         vertical-align: middle;
       }
@@ -530,11 +552,11 @@ export default {
       left: 0;
       border-radius: 50%;
       background-color: #fff;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 2px 4px 1px rgba(0, 0, 0, 0.3);
     }
     &:checked {
       border-color: #64bd63;
-      box-shadow: #64bd63 0 0 0 16px inset;
+      box-shadow: #64bd63 0 0 0 10px inset;
       background-color: #64bd63;
     }
     &:checked::before {

@@ -11,10 +11,10 @@
 <script>
 export default {
   name: "App",
-  data () {
+  data() {
     return {
       isEnergy: true
-    }
+    };
   },
   methods: {
     handleDone(val) {
