@@ -1,4 +1,5 @@
 # 使用方法
+使用 `touchstart` 事件， 只支持移动端 
 ### 安装
 ```
 yarn add input-plate-number // npm install input-plate-number --save
@@ -15,7 +16,7 @@ Vue.use(InputPlateNumber)
 #### 页面使用
 ```vue
   <input-plate-number @done="handleDone">
-    // slot 可选  
+    // slot 可选  default/header
   </input-plate-number>
 ```
 
@@ -39,11 +40,15 @@ Vue.use(InputPlateNumber)
 ```
 
 #### 回调函数
-> @done 输入完成后触发 可选
-> @key-click 按下按键之后触发  可选
-> @del-click 按下删除按钮的时候触发 可选  
-> @close 按下关闭的时候触发 可选
-> @inp-click 按下 哭的时候触发 可选
+> @done 输入完成后自动触发 可选
+>
+> @key-click 触摸输入字母之后触发  可选
+>
+> @del-click 触摸删除按钮的时候触发 可选
+>  
+> @close 触摸关闭的时候触发 可选
+>
+> @inp-click 触摸输入框的时候触发 可选
 ```vue
   methods: {
     /**

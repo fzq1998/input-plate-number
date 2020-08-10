@@ -238,6 +238,10 @@ export default {
         this.curKeyIdx = defaultPlateNumber.length + 1;
         this.inputs.pop();
       }
+    },
+    keyboardVisible (val) {
+      this.$emit('update:keyboardVisible', val)
+      this.innerKeyboardVisible = val
     }
   },
   methods: {

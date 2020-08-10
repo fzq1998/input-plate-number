@@ -1,14 +1,14 @@
 {
   "name": "input-plate-number",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "description": "基于 Vue 的输入车牌组件",
   "main": "lib/input-plate-number.common.js",
   "author": "fzq",
   "private": false,
   "license": "MIT",
-  "keywords": ["keyboard", "车牌输入"],
+  "keywords": ["keyboard", "车牌输入", "移动端车牌"],
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service serve",˚
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",

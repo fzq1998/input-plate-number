@@ -1,12 +1,16 @@
 <template>
   <div id="app">
     <input-plate-number
+      :keyboard-visible.sync="keyboardVisible"
       @done="handleDone"
       @key-click="handleKeyClick"
       :default-plate-number="defaultPlateNumber"
       :energy.sync="isEnergy"
       :key="defaultPlateNumberKey"
     ></input-plate-number>
+
+    <button @click="keyboardVisible = false">关闭</button>
+    <button @click="keyboardVisible = true">打开</button>
   </div>
 </template>
 
@@ -17,7 +21,8 @@ export default {
     return {
       isEnergy: false,
       defaultPlateNumber: "",
-      defaultPlateNumberKey: 1
+      defaultPlateNumberKey: 1,
+      keyboardVisible: true
     };
   },
   methods: {
