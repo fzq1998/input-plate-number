@@ -1,5 +1,6 @@
 <template>
   <div class="keyboard" :class="wrapClass">
+    <slot name="header"></slot>
     <div class="keyboard-input">
       <div
         class="keyboard-input__item"
@@ -19,9 +20,7 @@
     <div class="keyboard-content" v-show="innerKeyboardVisible">
       <div class="keyboard-bar">
         <div class="keyboard-bar__close" @touchstart="handleCloseKeyboard">
-          <span class="keyboard-bar__close--icon">
-            <i class="icon"></i>
-          </span>
+          <i class="keyboard-bar__close--icon"></i>
           <span class="keyboard-bar__close--label">关闭</span>
         </div>
         <label class="keyboard-bar__switch">
@@ -167,7 +166,7 @@ import { isLiter, isNumber, isPlateNum } from "../../utils/reg";
 import { getVertexPosition } from "../../utils";
 
 export default {
-  name: "input-plate-number",
+  name: "inputPlateNumber",
   props: {
     wrapClass: String,
     defaultPlateNumber: {
@@ -229,11 +228,14 @@ export default {
         if (this.inputs[this.curKeyIdx - 1]) {
           this.curKeyIdx++;
         }
-        this.inputs.push("");
+        this.inputs.length === 7 && this.inputs.push("");
       } else {
-        if (this.curKeyIdx === 8) {
-          this.curKeyIdx = 7;
-        }
+        const defaultPlateNumber = "浙B";
+        this.inputs = this.inputs.map((item, idx) => {
+          item = defaultPlateNumber[idx];
+          return item;
+        });
+        this.curKeyIdx = defaultPlateNumber.length + 1;
         this.inputs.pop();
       }
     }
@@ -242,6 +244,9 @@ export default {
     handleInpTouch(idx) {
       this.curKeyIdx = idx + 1;
       this.innerKeyboardVisible = true;
+      this.$emit("update:keyboardVisible", true);
+      const plateNum = this.inputs.join("");
+      this.$emit("inp-click", { plateNum });
     },
     handleEnergyChange() {
       this.$emit("update:energy", this.isEnergy);
@@ -273,13 +278,15 @@ export default {
         this.keyHoverX = e.touches[0].pageX + midWidth - offsetX;
       }
 
+      this.keyVal = key;
+      this.$set(this.inputs, this.curKeyIdx - 1, key);
+      const plateNum = this.inputs.join("");
+      this.$emit("key-click", { key, plateNum });
+
       if (
         (!this.isEnergy && this.curKeyIdx === 7) ||
         (this.isEnergy && this.curKeyIdx === 8)
       ) {
-        this.keyVal = key;
-        this.$set(this.inputs, this.curKeyIdx - 1, key);
-        const plateNum = this.inputs.join("");
         this.$emit(
           "done",
           {
@@ -287,16 +294,12 @@ export default {
             plateNum
           },
           () => {
-            this.innerKeyboardVisible = false;
+            this.handleClose();
           }
         );
         return;
       }
-
-      this.$set(this.inputs, this.curKeyIdx - 1, key);
-      this.keyVal = key;
       this.curKeyIdx++;
-      this.$emit("key-click", key);
     },
     handleKeyTouchEnd() {
       this.canKeyClick = true;
@@ -312,22 +315,26 @@ export default {
       this.curKeyIdx--;
       this.$emit("del-click", {});
     },
-    handleCloseKeyboard () {
-      this.handleClose()
+    handleCloseKeyboard() {
+      this.handleClose();
       this.$emit("close", this.innerKeyboardVisible);
     },
     handleClose() {
       this.innerKeyboardVisible = false;
+      this.$emit("update:keyboardVisible", false);
     }
   },
   created() {
     this.isEnergy = this.energy;
-    this.innerKeyboardVisible = this.keyboardVisible
+    this.innerKeyboardVisible = this.keyboardVisible;
+    this.curKeyIdx = this.defaultPlateNumber.length + 1;
+    if (this.energy && this.inputs.length === 7) {
+      this.inputs.push("");
+    }
     this.inputs = this.inputs.map((item, idx) => {
       item = this.defaultPlateNumber[idx];
       return item;
     });
-    this.curKeyIdx = this.defaultPlateNumber.length + 1;
   }
 };
 </script>
@@ -338,10 +345,10 @@ export default {
     display: flex;
     justify-content: center;
     margin: 0 auto;
-    max-width: 600px;
+
     &__item {
       position: relative;
-      flex: 0 0 74px;
+      flex: 0 0 70px;
       margin-right: 10px;
       height: 90px;
       border: 1px solid #dedede;
@@ -349,6 +356,7 @@ export default {
       text-align: center;
       font-size: 36px;
       box-sizing: border-box;
+      background-color: #fff;
 
       &:last-child {
         margin-right: 0;
@@ -411,26 +419,23 @@ export default {
       align-items: center;
 
       &--icon {
-        height: 90px;
-        i.icon {
-          display: inline-block;
-          vertical-align: middle;
+        display: inline-block;
+        vertical-align: middle;
+        width: $iconWidth;
+        height: $iconHeight;
+        background: #3092ff;
+        transform: rotate(45deg);
+        position: relative;
+        margin-right: 10px;
+
+        &::after {
+          content: "";
           width: $iconWidth;
           height: $iconHeight;
           background: #3092ff;
-          transform: rotate(45deg);
-          position: relative;
-          margin-right: 10px;
-
-          &::after {
-            content: "";
-            width: $iconWidth;
-            height: $iconHeight;
-            background: #3092ff;
-            transform: rotate(90deg);
-            position: absolute;
-            left: 0;
-          }
+          transform: rotate(90deg);
+          position: absolute;
+          left: 0;
         }
       }
       &--label {

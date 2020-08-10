@@ -3,7 +3,9 @@
     <input-plate-number
       @done="handleDone"
       @key-click="handleKeyClick"
+      :default-plate-number="defaultPlateNumber"
       :energy.sync="isEnergy"
+      :key="defaultPlateNumberKey"
     ></input-plate-number>
   </div>
 </template>
@@ -13,7 +15,9 @@ export default {
   name: "App",
   data() {
     return {
-      isEnergy: true
+      isEnergy: false,
+      defaultPlateNumber: "",
+      defaultPlateNumberKey: 1
     };
   },
   methods: {
@@ -21,8 +25,21 @@ export default {
       console.log(val);
     },
     handleKeyClick(key) {
-      console.log(key);
+      console.log(key, "outer key");
     }
+  },
+  created() {
+    setTimeout(() => {
+      this.defaultPlateNumber = "浙ZD65324";
+      this.isEnergy = true;
+      this.defaultPlateNumberKey++;
+    }, 2000);
   }
 };
 </script>
+
+<style>
+body {
+  background: #333;
+}
+</style>

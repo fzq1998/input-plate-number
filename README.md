@@ -1,6 +1,6 @@
-# input-plate-number (车牌键盘输入组件)
+# 使用方法
 ### 安装
-```shell script
+```
 yarn add input-plate-number // npm install input-plate-number --save
 ```
 ### 使用
@@ -11,7 +11,8 @@ import 'input-plate-number/lib/input-plate-number.css'
 
 Vue.use(InputPlateNumber)
 ```
-#### 页面中使用
+
+#### 页面使用
 ```vue
   <input-plate-number @done="handleDone">
     // slot 可选  
@@ -26,7 +27,7 @@ Vue.use(InputPlateNumber)
       type: String,
       default: "浙B"
     },
-    keyboardVisible: { // 是否是显示键盘 支持 .sync
+    keyboardVisible: { // 是否显示键盘 支持 .sync
       type: Boolean,
       default: true
     },
@@ -38,10 +39,11 @@ Vue.use(InputPlateNumber)
 ```
 
 #### 回调函数
-> @done 输入完成后触发
-> @key-click 按下按键之后触发  
+> @done 输入完成后触发 可选
+> @key-click 按下按键之后触发  可选
 > @del-click 按下删除按钮的时候触发 可选  
-> @close 按下关闭的时候触发
+> @close 按下关闭的时候触发 可选
+> @inp-click 按下 哭的时候触发 可选
 ```vue
   methods: {
     /**
@@ -58,9 +60,10 @@ Vue.use(InputPlateNumber)
     /**
      * 按下的字符的时候触发 可选
      * @param key 实时按下的文字
+     * @param plateNum 实时按下的车牌
      */
-    handleKeyClick (key) {
-      console.log(key)
+    handleKeyClick ({ key, plateNum }) {
+      console.log(key, plateNum)
     }
   }
 ```

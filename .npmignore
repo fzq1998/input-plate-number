@@ -1,8 +1,8 @@
 # 忽略目录
+.idea/
 examples/
 packages/
 public/
-.idea/
 tests/
 
 # 忽略指定文件
