@@ -329,12 +329,11 @@ export default {
     }
   },
   created() {
+    // TODO energy 是否是新能源 目前由外部传入 可改成外部传入默认车牌后根据车牌长度自动判断是否新能源
     this.isEnergy = this.energy;
     this.innerKeyboardVisible = this.keyboardVisible;
     this.curKeyIdx = this.defaultPlateNumber.length + 1;
-    if (this.energy && this.inputs.length === 7) {
-      this.inputs.push("");
-    }
+    if (this.isEnergy && this.inputs.length === 7) { this.inputs.push(""); }
     this.inputs = this.inputs.map((item, idx) => {
       item = this.defaultPlateNumber[idx];
       return item;

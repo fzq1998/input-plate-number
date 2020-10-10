@@ -3,13 +3,6 @@
  */
 module.exports = {
   plugins: {
-    // "postcss-import": {},
-    // "postcss-url": {},
-    // "postcss-aspect-ratio-mini": {},
-    // "postcss-write-svg": {
-    //   utf8: false
-    // },
-    // "postcss-cssnext": {},
     "postcss-px-to-viewport": {
       viewportWidth: 750, // (Number) The width of the viewport.
       viewportHeight: 1334, // (Number) The height of the viewport.

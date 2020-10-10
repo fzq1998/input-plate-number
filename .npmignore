@@ -6,6 +6,9 @@ public/
 tests/
 
 # 忽略指定文件
+.browserslistrc
+.eslintrc.js
 vue.config.js
 babel.config.js
 *.map
+*.log

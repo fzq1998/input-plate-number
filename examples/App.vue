@@ -7,6 +7,7 @@
       :default-plate-number="defaultPlateNumber"
       :energy.sync="isEnergy"
       :key="defaultPlateNumberKey"
+      wrap-class="box"
     ></input-plate-number>
 
     <button @click="keyboardVisible = false">关闭</button>
@@ -35,10 +36,10 @@ export default {
   },
   created() {
     setTimeout(() => {
-      this.defaultPlateNumber = "浙ZD65324";
-      this.isEnergy = true;
+      this.defaultPlateNumber = "浙Z12345";
+      // this.isEnergy = true;
       this.defaultPlateNumberKey++;
-    }, 2000);
+    }, 4000);
   }
 };
 </script>
@@ -46,5 +47,9 @@ export default {
 <style>
 body {
   background: #333;
+}
+.box {
+  padding: 20px;
+  background-color: #fff;
 }
 </style>
