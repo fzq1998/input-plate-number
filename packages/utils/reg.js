@@ -30,3 +30,11 @@ export const isPlateNum = plateNum => {
 export const isLiter = liter => {
   return /[\u4e00-\u9fa5]/.test(liter);
 };
+
+/**
+ * 判断是否是移动端
+ * @return {boolean}
+ */
+export const isMobile = () => {
+  return /Android|webOS|iPhone|iPod|BlackBerry|RIM|Windows Phone|Nexus|Nokia|iPad/i.test(navigator.userAgent)
+}

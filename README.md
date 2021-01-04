@@ -1,9 +1,11 @@
 # 使用方法
-使用 `touchstart` 事件， 只支持移动端 
+> 使用 `touchstart` 事件，只支持移动端, PC端采用输入框方案
+ 
 ### 安装
 ```
-yarn add input-plate-number // npm install input-plate-number --save
+yarn add input-plate-number  // npm install input-plate-number --save
 ```
+
 ### 使用
 ```javascript
 // main.js
@@ -49,6 +51,9 @@ Vue.use(InputPlateNumber)
 > @close 触摸关闭的时候触发 可选
 >
 > @inp-click 触摸输入框的时候触发 可选
+>
+> @pc-car-inp Pc端变为输入框输出 
+
 ```vue
   methods: {
     /**

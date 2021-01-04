@@ -2,19 +2,21 @@
   <div class="keyboard" :class="wrapClass">
     <slot name="header"></slot>
     <div class="keyboard-input">
-      <div
-        class="keyboard-input__item"
-        :class="[
-          curKeyIdx === idx + 1 && 'keyboard-input__active ignore-height',
-          idx === 7 && 'keyboard-input__energy'
-        ]"
-        v-for="(item, idx) in inputs"
-        :key="idx"
-        @touchstart="handleInpTouch(idx)"
-      >
-        {{ item }}
-        <i v-show="idx === 7" class="keyboard-input__energy--icon"></i>
-      </div>
+      <template v-if="isMobile">
+        <div
+            class="keyboard-input__item"
+            :class="[ curKeyIdx === idx + 1 && 'keyboard-input__active ignore-height', idx === 7 && 'keyboard-input__energy' ]"
+            v-for="(item, idx) in inputs" :key="idx"
+            @touchstart="handleInpTouch(idx)">
+          {{ item }}
+          <i v-show="idx === 7" class="keyboard-input__energy--icon"></i>
+        </div>
+      </template>
+      <template v-else>
+        <input type="text" class="keyboard-input__content"
+               placeholder="请输入车牌"
+               @input="handleInput" v-model="pcCarNumber">
+      </template>
     </div>
     <slot></slot>
     <div class="keyboard-content" v-show="innerKeyboardVisible">
@@ -162,7 +164,7 @@
 </template>
 
 <script>
-import { isLiter, isNumber, isPlateNum } from "../../utils/reg";
+import { isLiter, isNumber, isPlateNum, isMobile } from "../../utils/reg";
 import { getVertexPosition } from "../../utils";
 
 export default {
@@ -212,7 +214,9 @@ export default {
       keyVal: "",
       isEnergy: false, // 是否新能源
       inputs: Array(7).fill(""),
-      innerKeyboardVisible: true
+      innerKeyboardVisible: true,
+      isMobile: true, // 移动端
+      pcCarNumber: ''
     };
   },
   computed: {
@@ -326,10 +330,18 @@ export default {
     handleClose() {
       this.innerKeyboardVisible = false;
       this.$emit("update:keyboardVisible", false);
+    },
+    handleInput () {
+      this.emit('pcCarInp', this.pcCarNumber)
     }
   },
   created() {
-    // TODO energy 是否是新能源 目前由外部传入 可改成外部传入默认车牌后根据车牌长度自动判断是否新能源
+    // 是否处于移动端
+    this.isMobile = isMobile()
+    if (!this.isMobile) {
+      this.innerKeyboardVisible = false
+      return
+    }
     this.isEnergy = this.energy;
     this.innerKeyboardVisible = this.keyboardVisible;
     this.curKeyIdx = this.defaultPlateNumber.length + 1;
@@ -389,6 +401,27 @@ export default {
     }
     .ignore-height {
       background-size: 20px 2px;
+    }
+
+    &__content {
+      background-color: #fff;
+      background-image: none;
+      border-radius: 4px;
+      border: 1px solid #dcdfe6;
+      box-sizing: border-box;
+      color: #606266;
+      display: inline-block;
+      font-size: inherit;
+      height: 50px;
+      line-height: 50px;
+      outline: none;
+      padding: 0 15px;
+      transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+      width: 100%;
+      &:focus {
+        outline: none;
+        border-color: #409eff;
+      }
     }
   }
 
