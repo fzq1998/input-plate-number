@@ -15,6 +15,7 @@
       <template v-else>
         <input type="text" class="keyboard-input__content"
                placeholder="请输入车牌"
+               @keydown="handleKeyDown"
                @input="handleInput" v-model="pcCarNumber">
       </template>
     </div>
@@ -331,8 +332,21 @@ export default {
       this.innerKeyboardVisible = false;
       this.$emit("update:keyboardVisible", false);
     },
-    handleInput () {
-      this.emit('pcCarInp', this.pcCarNumber)
+    handleInput (e) {
+      this.$emit('key-click', { key: e.data, plateNum: this.pcCarNumber })
+    },
+    handleKeyDown(e) {
+      if (e.key.toLowerCase() === 'enter') {
+        this.$emit(
+            "done",
+            {
+              isPlateNum: isPlateNum(this.pcCarNumber),
+              plateNum: this.pcCarNumber
+            }
+        );
+      } else if (e.key.toLowerCase() === 'backspace') {
+        this.$emit("del-click", {});
+      }
     }
   },
   created() {
