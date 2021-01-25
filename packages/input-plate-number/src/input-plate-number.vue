@@ -188,22 +188,10 @@ export default {
   data() {
     return {
       curKeyIdx: 1, // 默认初始下标1
-      provinceData: [
-        "京津晋冀蒙辽吉黑沪",
-        "苏浙皖闽赣鲁豫鄂湘",
-        "粤桂琼渝川贵云藏",
-        "陕甘青宁新W"
-      ],
       provinceData1: ["京", "津", "晋", "冀", "蒙", "辽", "吉", "黑", "沪"],
       provinceData2: ["苏", "浙", "皖", "闽", "赣", "鲁", "豫", "鄂", "湘"],
       provinceData3: ["粤", "桂", "琼", "渝", "川", "贵", "云", "藏"],
       provinceData4: ["陕", "甘", "青", "宁", "新", "W"],
-      keyboardData: [
-        "1234567890",
-        "QWERTYUP学军",
-        "ASDFGHJKL警",
-        "ZXCVBNM港澳"
-      ],
       keyboardData1: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
       keyboardData2: ["Q", "W", "E", "R", "T", "Y", "U", "P", "学", "军"],
       keyboardData3: ["A", "S", "D", "F", "G", "H", "J", "K", "L", "警"],

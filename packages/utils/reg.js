@@ -17,7 +17,7 @@ export const isNumber = value => {
  * @returns {boolean}
  */
 export const isPlateNum = plateNum => {
-  return /^(([京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领][A-Z](([0-9]{5}[DF])|([DF]([A-HJ-NP-Z0-9])[0-9]{4})))|([京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领][A-Z][A-HJ-NP-Z0-9]{4}[A-HJ-NP-Z0-9挂学警港澳使领]))$/.test(
+  return /^(([京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领无][A-Z](([0-9]{5}[DF])|([DF]([A-HJ-NP-Z0-9])[0-9]{4})))|([京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领无][A-Z][A-HJ-NP-Z0-9]{4}[A-HJ-NP-Z0-9挂学警港澳使领]))$/.test(
     plateNum
   );
 };
@@ -36,5 +36,7 @@ export const isLiter = liter => {
  * @return {boolean}
  */
 export const isMobile = () => {
-  return /Android|webOS|iPhone|iPod|BlackBerry|RIM|Windows Phone|Nexus|Nokia|iPad/i.test(navigator.userAgent)
-}
+  return /Android|webOS|iPhone|iPod|BlackBerry|RIM|Windows Phone|Nexus|Nokia|iPad/i.test(
+    navigator.userAgent
+  );
+};

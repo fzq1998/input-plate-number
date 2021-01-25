@@ -21,37 +21,6 @@ Vue.use(InputPlateNumber)
     // slot 可选  default/header
   </input-plate-number>
 ```
-
-### props 传入参数
-```vue
-  props: {
-    wrapClass: String, // 最外部的 class 名字 
-    defaultPlateNumber: { // 初始车牌  默认 浙B
-      type: String,
-      default: "浙B"
-    },
-    keyboardVisible: { // 是否显示键盘 支持 .sync
-      type: Boolean,
-      default: true
-    },
-    energy: { // 是否是新能源 支持 .sync
-      type: Boolean,
-      default: false
-    }
-  }
-```
-
-#### 回调函数
-> @done 输入完成后触发  (移动端输入完成后则自动触发， PC 端需要按下回车键触发)
->
-> @key-click 输入时触发 (移动端触摸自定义车牌键盘触发， PC 端输入框输入时自动触发)
->
-> @del-click 删除时触发 （移动端触摸自定义删除键触发，PC 端按下Backspace回退键触发）
->  
-> @close 移动端关闭自定义键盘时触发
->
-> @inp-click 移动端触摸输入框的时候触发
-
 ```vue
   methods: {
     /**
@@ -75,3 +44,30 @@ Vue.use(InputPlateNumber)
     }
   }
 ```
+
+
+## API
+
+### slot 
+|          参数        |              说明               | 
+| :------------------ | :---------------------------- |
+|      default        |      可在组件中body填充          |   
+|      header         |    可在组件中输入框中进行填充      |
+
+### props 传入参数
+|          参数         |              说明               |   类型      | 默认值   |
+| :------------------ | :---------------------------- | :-------  | :----- |
+|      wrap-class      |       最外部的class名字          | `String`   |    -    |
+| default-plate-number |        初始化时展示的车牌        | `String`   |   浙B    |
+|   keyboard-visible   | 是否显示自定义键盘  支持 .sync   | `Boolean`  | `true`   |
+|        energy        | 是否打开新能源开关  支持 .sync  | `Boolean`  | `false`  |
+
+#### Events
+|  事件名   |                             说明                             |                  回调函数                  |
+| :------- | :------------------------ | :---------------------------------------- |
+|   done    | 输入完成后触发 (移动端输入完成后则自动触发， PC 端需要按下回车键触发) | `{ isPlateNum: Boolean,plateNum: String }` |
+| key-click | 输入时触发 (移动端触摸自定义车牌键盘触发， PC 端输入框输入时自动触发) |    `{ key: string, plateNum: string }`     |
+| del-click | 删除时触发 （移动端触摸自定义删除键触发，PC 端按下 `Backspace` 回退键触发） |                    `-`                     |
+| inp-click |                移动端触摸上方输入框的时候触发                |           `{ plateNum: string }`           |
+|   close   |                  移动端关闭自定义键盘时触发                  |                    `-`                     |
+
