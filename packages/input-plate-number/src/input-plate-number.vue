@@ -165,7 +165,8 @@
 </template>
 
 <script>
-import { isLiter, isNumber, isPlateNum, isMobile } from "../../utils/reg";
+import { isLiter, isNumber, isPlateNum } from "../../utils/reg";
+import isMobile from "../../utils/is-mobile";
 import { getVertexPosition } from "../../utils";
 
 export default {
