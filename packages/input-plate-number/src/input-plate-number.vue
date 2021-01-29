@@ -15,7 +15,7 @@
       <template v-else>
         <input type="text" class="keyboard-input__content"
                placeholder="请输入车牌"
-               @keydown="handleKeyDown"
+               @keyup="handleKeyUp"
                @input="handleInput" v-model="pcCarNumber">
       </template>
     </div>
@@ -104,7 +104,7 @@
         <div class="keyboard-row">
           <div
             class="keyboard-key"
-            :class="[curKeyIdx === 2 && 'keyboard-key__disabled']"
+            :class="[curKeyIdx === 2 && !isNoCar && 'keyboard-key__disabled']"
             @touchstart="handleKeyTouchStart(key, $event)"
             @touchend="handleKeyTouchEnd"
             v-for="key in keyboardData1"
@@ -184,6 +184,10 @@ export default {
     energy: {
       type: Boolean,
       default: false
+    },
+    isNoCar: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -244,7 +248,7 @@ export default {
       this.innerKeyboardVisible = true;
       this.$emit("update:keyboardVisible", true);
       const plateNum = this.inputs.join("");
-      this.$emit("inp-click", { plateNum });
+      this.$emit("inp-click", { plateNum, curIdx: this.curKeyIdx });
     },
     handleEnergyChange() {
       this.$emit("update:energy", this.isEnergy);
@@ -256,7 +260,7 @@ export default {
       this.canKeyClick = false;
 
       // 第二位数字不能点击
-      if (this.curKeyIdx === 2 && isNumber(key)) {
+      if (this.curKeyIdx === 2 && !this.isNoCar && isNumber(key)) {
         return;
       }
       // 车牌出去了第一位省份 以及普通车牌最后一位 其它中文文字不能点击
@@ -279,7 +283,7 @@ export default {
       this.keyVal = key;
       this.$set(this.inputs, this.curKeyIdx - 1, key);
       const plateNum = this.inputs.join("");
-      this.$emit("key-click", { key, plateNum });
+      this.$emit("key-click", { curKey: key, plateNum });
 
       if (
         (!this.isEnergy && this.curKeyIdx === 7) ||
@@ -311,7 +315,7 @@ export default {
       }
       this.$set(this.inputs, this.curKeyIdx - 1, " ");
       this.curKeyIdx--;
-      this.$emit("del-click", {});
+      this.$emit("del-click", { plateNum: this.inputs.filter(e => e).join('') });
     },
     handleCloseKeyboard() {
       this.handleClose();
@@ -324,7 +328,7 @@ export default {
     handleInput (e) {
       this.$emit('key-click', { key: e.data, plateNum: this.pcCarNumber })
     },
-    handleKeyDown(e) {
+    handleKeyUp(e) {
       if (e.key.toLowerCase() === 'enter') {
         this.$emit(
             "done",
@@ -334,7 +338,7 @@ export default {
             }
         );
       } else if (e.key.toLowerCase() === 'backspace') {
-        this.$emit("del-click", {});
+        this.$emit("del-click", { plateNum: this.pcCarNumber });
       }
     }
   },
@@ -343,6 +347,7 @@ export default {
     this.isMobile = isMobile()
     if (!this.isMobile) {
       this.innerKeyboardVisible = false
+      this.pcCarNumber = this.defaultPlateNumber
       return
     }
     this.isEnergy = this.energy;

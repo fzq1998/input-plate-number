@@ -1,9 +1,13 @@
 <template>
   <div id="app">
     <input-plate-number
-      :keyboard-visible.sync="keyboardVisible"
       @done="handleDone"
       @key-click="handleKeyClick"
+      @inp-click="handleInpClick"
+      @del-click="handleDelClick"
+
+      :keyboard-visible.sync="keyboardVisible"
+      :is-no-car="true"
       :default-plate-number="defaultPlateNumber"
       :energy.sync="isEnergy"
       :key="defaultPlateNumberKey"
@@ -21,7 +25,7 @@ export default {
   data() {
     return {
       isEnergy: false,
-      defaultPlateNumber: "",
+      defaultPlateNumber: "浙B",
       defaultPlateNumberKey: 1,
       keyboardVisible: true
     };
@@ -31,15 +35,21 @@ export default {
       console.log(val);
     },
     handleKeyClick(key) {
-      console.log(key, "outer key");
+      console.log(key, "--- key click");
+    },
+    handleInpClick (key) {
+      console.log(key, '--- inp key click')
+    },
+    handleDelClick(key) {
+      console.log(key, '--- del key click')
     }
   },
   created() {
-    setTimeout(() => {
-      this.defaultPlateNumber = "浙Z12345";
-      // this.isEnergy = true;
-      this.defaultPlateNumberKey++;
-    }, 4000);
+    // setTimeout(() => {
+    //   this.defaultPlateNumber = "浙Z12345";
+    //   // this.isEnergy = true;
+    //   this.defaultPlateNumberKey++;
+    // }, 4000);
   }
 };
 </script>

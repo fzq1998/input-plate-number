@@ -61,13 +61,14 @@ Vue.use(InputPlateNumber)
 | default-plate-number |        初始化时展示的车牌        | `String`   |   浙B    |
 |   keyboard-visible   | 是否显示自定义键盘  支持 .sync   | `Boolean`  | `true`   |
 |        energy        | 是否打开新能源开关  支持 .sync  | `Boolean`  | `false`  |
+|        isNoCar        | 是否打开无牌车适配    | `Boolean`  | `false`  |
 
 #### Events
 |  事件名   |                             说明                             |                  回调函数                  |
 | :------- | :------------------------ | :---------------------------------------- |
 |   done    | 输入完成后触发 (移动端输入完成后则自动触发， PC 端需要按下回车键触发) | `{ isPlateNum: Boolean,plateNum: String }` |
-| key-click | 输入时触发 (移动端触摸自定义车牌键盘触发， PC 端输入框输入时自动触发) |    `{ key: string, plateNum: string }`     |
-| del-click | 删除时触发 （移动端触摸自定义删除键触发，PC 端按下 `Backspace` 回退键触发） |                    `-`                     |
-| inp-click |                移动端触摸上方输入框的时候触发                |           `{ plateNum: string }`           |
+| key-click | 输入时触发 (移动端触摸自定义车牌键盘触发， PC 端输入框输入时自动触发) |    `{ curKey: String, plateNum: String }`     |
+| del-click | 删除时触发 （移动端触摸自定义删除键触发，PC 端按下 `Backspace` 回退键触发） |        `{  plateNum: String }`       |
+| inp-click |                移动端触摸上方输入框的时候触发                |           `{  curIdx: Number, plateNum: String }`           |
 |   close   |                  移动端关闭自定义键盘时触发                  |                    `-`                     |
 
