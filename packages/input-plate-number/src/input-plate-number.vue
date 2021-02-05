@@ -116,7 +116,10 @@
         <div class="keyboard-row">
           <div
             class="keyboard-key"
-            :class="[isLiterCom(key) && 'keyboard-key__disabled']"
+            :class="[
+                isLiterCom(key) && 'keyboard-key__disabled',
+                isToO(key) && 'keyboard-key__disabled'
+            ]"
             @touchstart="handleKeyTouchStart(key, $event)"
             @touchend="handleKeyTouchEnd"
             v-for="key in keyboardData2"
@@ -165,7 +168,7 @@
 </template>
 
 <script>
-import { isLiter, isNumber, isPlateNum } from "../../utils/reg";
+import { isLiter, isPlateNum } from "../../utils/reg";
 import isMobile from "../../utils/is-mobile";
 import { getVertexPosition } from "../../utils";
 
@@ -196,11 +199,11 @@ export default {
       provinceData1: ["京", "津", "晋", "冀", "蒙", "辽", "吉", "黑", "沪"],
       provinceData2: ["苏", "浙", "皖", "闽", "赣", "鲁", "豫", "鄂", "湘"],
       provinceData3: ["粤", "桂", "琼", "渝", "川", "贵", "云", "藏"],
-      provinceData4: ["陕", "甘", "青", "宁", "新", "W"],
+      provinceData4: ["陕", "甘", "青", "宁", "新", "使", "无"],
       keyboardData1: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
-      keyboardData2: ["Q", "W", "E", "R", "T", "Y", "U", "P", "学", "军"],
-      keyboardData3: ["A", "S", "D", "F", "G", "H", "J", "K", "L", "警"],
-      keyboardData4: ["Z", "X", "C", "V", "B", "N", "M", "港", "澳"],
+      keyboardData2: ["Q", "W", "E", "R", "T", "Y", "U", "O", "P", "港"],
+      keyboardData3: ["A", "S", "D", "F", "G", "H", "J", "K", "L", "澳"],
+      keyboardData4: ["Z", "X", "C", "V", "B", "N", "M", "学", "领"],
       keyHoverX: 0,
       keyHoverY: 0,
       keyHover: false,
@@ -216,8 +219,17 @@ export default {
   computed: {
     isLiterCom() {
       return function(liter) {
-        return isLiter(liter) && this.curKeyIdx !== 7;
+        if (this.curKeyIdx === 7) {
+          return isLiter(liter) && this.isEnergy
+        } else {
+          return isLiter(liter);
+        }
       };
+    },
+    isToO() {
+      return function(liter) {
+        return this.curKeyIdx !== 2 && liter.toString().toLocaleLowerCase() === 'o'; // 字母o
+      }
     }
   },
   watch: {
@@ -246,8 +258,9 @@ export default {
     handleInpTouch(idx) {
       this.curKeyIdx = idx + 1;
       this.innerKeyboardVisible = true;
-      this.$emit("update:keyboardVisible", true);
       const plateNum = this.inputs.join("");
+
+      this.$emit("update:keyboardVisible", true);
       this.$emit("inp-click", { plateNum, curIdx: this.curKeyIdx });
     },
     handleEnergyChange() {
@@ -258,16 +271,14 @@ export default {
         return;
       }
       this.canKeyClick = false;
-
-      // 第二位数字不能点击
-      if (this.curKeyIdx === 2 && !this.isNoCar && isNumber(key)) {
-        return;
+      try {
+        const currentParentClassList = e.target.parentElement.classList
+        if (currentParentClassList.contains('keyboard-key__disabled')) {
+          return;
+        }
+      } catch (e) {
+        console.log(e)
       }
-      // 车牌出去了第一位省份 以及普通车牌最后一位 其它中文文字不能点击
-      if (isLiter(key) && this.curKeyIdx !== 7 && this.curKeyIdx !== 1) {
-        return;
-      }
-
       this.keyHover = true;
       let { top, left } = getVertexPosition(e.target);
       const offsetX = e.touches[0].pageX - left;
@@ -308,13 +319,14 @@ export default {
       this.keyHover = false;
     },
     handleDelTouch() {
-      if (this.curKeyIdx <= 1) {
-        this.curKeyIdx = 1;
-        this.$set(this.inputs, this.curKeyIdx - 1, " ");
-        return;
+      const idx = this.isEnergy ? 7 : 6
+      if (this.inputs[idx]) {
+        this.$set(this.inputs, idx, "");
+      } else {
+        this.curKeyIdx--;
+        this.$set(this.inputs, this.curKeyIdx - 1, "");
       }
-      this.$set(this.inputs, this.curKeyIdx - 1, " ");
-      this.curKeyIdx--;
+      this.curKeyIdx <= 1 && (this.curKeyIdx = 1);
       this.$emit("del-click", { plateNum: this.inputs.filter(e => e).join('') });
     },
     handleCloseKeyboard() {
@@ -528,12 +540,13 @@ export default {
       user-select: none;
       width: 100%;
       line-height: 90px;
-      font-size: 30px;
+      font-size: 36px;
       color: #0b0b0b;
       box-shadow: 0 2px 2px #d7d7d7;
       background-color: #fff;
       border-radius: 12px;
       z-index: 50;
+      font-family: "PingFangSC-Regular",serif;
     }
     &__empty {
       &-small {
