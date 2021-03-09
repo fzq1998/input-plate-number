@@ -1,9 +1,11 @@
 /**
- * Created by fzq on 2021/1/28
+ * currentFile link https://github.com/juliangruber/is-mobile/blob/master/index.js
+ * @type {RegExp}
+ * @return Boolean
  */
-const mobileRE = /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series[46]0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i;
+const mobileRE = /(android|bb\d+|meego).+mobile|armv7l|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series[46]0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i;
 
-const tabletRE = /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series[46]0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino|android|ipad|playbook|silk/i;
+const tabletRE = /android|ipad|playbook|silk/i;
 
 export default function isMobile(opts) {
   if (!opts) opts = {};
@@ -14,7 +16,7 @@ export default function isMobile(opts) {
   }
   if (typeof ua !== "string") return false;
 
-  let result = opts.tablet ? tabletRE.test(ua) : mobileRE.test(ua);
+  let result = mobileRE.test(ua) || (!!opts.tablet && tabletRE.test(ua));
 
   if (
     !result &&
