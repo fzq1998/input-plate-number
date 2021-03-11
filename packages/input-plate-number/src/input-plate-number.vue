@@ -4,19 +4,28 @@
     <div class="keyboard-input">
       <template v-if="isMobile">
         <div
-            class="keyboard-input__item"
-            :class="[ curKeyIdx === idx + 1 && 'keyboard-input__active ignore-height', idx === 7 && 'keyboard-input__energy' ]"
-            v-for="(item, idx) in inputs" :key="idx"
-            @touchstart="handleInpTouch(idx)">
+          class="keyboard-input__item"
+          :class="[
+            curKeyIdx === idx + 1 && 'keyboard-input__active ignore-height',
+            idx === 7 && 'keyboard-input__energy'
+          ]"
+          v-for="(item, idx) in inputs"
+          :key="idx"
+          @touchstart="handleInpTouch(idx)"
+        >
           {{ item }}
           <i v-show="idx === 7" class="keyboard-input__energy--icon"></i>
         </div>
       </template>
       <template v-else>
-        <input type="text" class="keyboard-input__content"
-               placeholder="请输入车牌"
-               @keyup="handleKeyUp"
-               @input="handleInput" v-model="pcCarNumber">
+        <input
+          type="text"
+          class="keyboard-input__content"
+          placeholder="请输入车牌"
+          @keyup="handleKeyUp"
+          @input="handleInput"
+          v-model="pcCarNumber"
+        />
       </template>
     </div>
     <slot></slot>
@@ -117,8 +126,8 @@
           <div
             class="keyboard-key"
             :class="[
-                isLiterCom(key) && 'keyboard-key__disabled',
-                isToO(key) && 'keyboard-key__disabled'
+              isLiterCom(key) && 'keyboard-key__disabled',
+              isToO(key) && 'keyboard-key__disabled'
             ]"
             @touchstart="handleKeyTouchStart(key, $event)"
             @touchend="handleKeyTouchEnd"
@@ -213,14 +222,14 @@ export default {
       inputs: Array(7).fill(""),
       innerKeyboardVisible: true,
       isMobile: true, // 移动端
-      pcCarNumber: ''
+      pcCarNumber: ""
     };
   },
   computed: {
     isLiterCom() {
       return function(liter) {
         if (this.curKeyIdx === 7) {
-          return isLiter(liter) && this.isEnergy
+          return isLiter(liter) && this.isEnergy;
         } else {
           return isLiter(liter);
         }
@@ -228,8 +237,10 @@ export default {
     },
     isToO() {
       return function(liter) {
-        return this.curKeyIdx !== 2 && liter.toString().toLocaleLowerCase() === 'o'; // 字母o
-      }
+        return (
+          this.curKeyIdx !== 2 && liter.toString().toLocaleLowerCase() === "o"
+        ); // 字母o
+      };
     }
   },
   watch: {
@@ -249,9 +260,23 @@ export default {
         this.inputs.pop();
       }
     },
-    keyboardVisible (val) {
-      this.$emit('update:keyboardVisible', val)
-      this.innerKeyboardVisible = val
+    keyboardVisible(val) {
+      this.$emit("update:keyboardVisible", val);
+      this.innerKeyboardVisible = val;
+    },
+    defaultPlateNumber(val) {
+      if (val) {
+        if (!this.isMobile) {
+          this.pcCarNumber = val;
+          return;
+        }
+        if (val.length === 8) {
+          this.isEnergy = true;
+        }
+        console.log(val);
+        this.fillInputVal();
+        this.$forceUpdate();
+      }
     }
   },
   methods: {
@@ -272,12 +297,12 @@ export default {
       }
       this.canKeyClick = false;
       try {
-        const currentParentClassList = e.target.parentElement.classList
-        if (currentParentClassList.contains('keyboard-key__disabled')) {
+        const currentParentClassList = e.target.parentElement.classList;
+        if (currentParentClassList.contains("keyboard-key__disabled")) {
           return;
         }
       } catch (e) {
-        console.log(e)
+        console.log(e);
       }
       this.keyHover = true;
       let { top, left } = getVertexPosition(e.target);
@@ -319,7 +344,7 @@ export default {
       this.keyHover = false;
     },
     handleDelTouch() {
-      const idx = this.isEnergy ? 7 : 6
+      const idx = this.isEnergy ? 7 : 6;
       if (this.inputs[idx]) {
         this.$set(this.inputs, idx, "");
       } else {
@@ -327,7 +352,9 @@ export default {
         this.$set(this.inputs, this.curKeyIdx - 1, "");
       }
       this.curKeyIdx <= 1 && (this.curKeyIdx = 1);
-      this.$emit("del-click", { plateNum: this.inputs.filter(e => e).join('') });
+      this.$emit("del-click", {
+        plateNum: this.inputs.filter(e => e).join("")
+      });
     },
     handleCloseKeyboard() {
       this.handleClose();
@@ -337,39 +364,41 @@ export default {
       this.innerKeyboardVisible = false;
       this.$emit("update:keyboardVisible", false);
     },
-    handleInput (e) {
-      this.$emit('key-click', { key: e.data, plateNum: this.pcCarNumber })
+    handleInput(e) {
+      this.$emit("key-click", { key: e.data, plateNum: this.pcCarNumber });
     },
     handleKeyUp(e) {
-      if (e.key.toLowerCase() === 'enter') {
-        this.$emit(
-            "done",
-            {
-              isPlateNum: isPlateNum(this.pcCarNumber),
-              plateNum: this.pcCarNumber
-            }
-        );
-      } else if (e.key.toLowerCase() === 'backspace') {
+      if (e.key.toLowerCase() === "enter") {
+        this.$emit("done", {
+          isPlateNum: isPlateNum(this.pcCarNumber),
+          plateNum: this.pcCarNumber
+        });
+      } else if (e.key.toLowerCase() === "backspace") {
         this.$emit("del-click", { plateNum: this.pcCarNumber });
       }
+    },
+    fillInputVal() {
+      this.curKeyIdx = this.defaultPlateNumber.length + 1;
+      if (this.isEnergy && this.inputs.length === 7) {
+        this.inputs.push("");
+      }
+      this.inputs = this.inputs.map((item, idx) => {
+        item = this.defaultPlateNumber[idx];
+        return item;
+      });
     }
   },
   created() {
     // 是否处于移动端
-    this.isMobile = isMobile()
+    this.isMobile = isMobile();
     if (!this.isMobile) {
-      this.innerKeyboardVisible = false
-      this.pcCarNumber = this.defaultPlateNumber
-      return
+      this.innerKeyboardVisible = false;
+      this.pcCarNumber = this.defaultPlateNumber;
+      return;
     }
     this.isEnergy = this.energy;
     this.innerKeyboardVisible = this.keyboardVisible;
-    this.curKeyIdx = this.defaultPlateNumber.length + 1;
-    if (this.isEnergy && this.inputs.length === 7) { this.inputs.push(""); }
-    this.inputs = this.inputs.map((item, idx) => {
-      item = this.defaultPlateNumber[idx];
-      return item;
-    });
+    this.fillInputVal();
   }
 };
 </script>
@@ -436,7 +465,7 @@ export default {
       line-height: 50px;
       outline: none;
       padding: 0 15px;
-      transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+      transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
       width: 100%;
       &:focus {
         outline: none;
@@ -546,7 +575,7 @@ export default {
       background-color: #fff;
       border-radius: 12px;
       z-index: 50;
-      font-family: "PingFangSC-Regular",serif;
+      font-family: "PingFangSC-Regular", serif;
     }
     &__empty {
       &-small {

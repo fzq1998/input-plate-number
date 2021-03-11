@@ -4,8 +4,6 @@
 > 
 > PC 端则采用 `input` 输入框的形式用于处理用户输入车牌
 
-![input-plate-number](https://cabin-cdn.oss-cn-hangzhou.aliyuncs.com/video/input-plate-number.gif)
- 
 ## 安装
 ```
 yarn add input-plate-number  // npm install --save input-plate-number 
@@ -58,4 +56,5 @@ Vue.use(InputPlateNumber)
 
 
 ## 注意事项
-* 如果要更改默认车牌应在 `created` 生命周期中进行处理，否则需要利用组件 `key` 特性进行重新渲染才会生效
+* ~~如果要更改默认车牌应在 `created` 生命周期中进行处理，否则需要利用组件 `key` 特性进行重新渲染才会生效~~ (1.4.1之后版本已解决)
+* 目前暂不支持 `v-model` 使用
