@@ -273,7 +273,6 @@ export default {
         if (val.length === 8) {
           this.isEnergy = true;
         }
-        console.log(val);
         this.fillInputVal();
         this.$forceUpdate();
       }
@@ -290,20 +289,19 @@ export default {
     },
     handleEnergyChange() {
       this.$emit("update:energy", this.isEnergy);
-      this.$emit("change-energy", this.isEnergy)
+      this.$emit("change-energy", this.isEnergy);
     },
     handleKeyTouchStart(key, e) {
+      if (this.curKeyIdx > 8) return;
       if (!this.canKeyClick) {
         return;
       }
       this.canKeyClick = false;
       try {
         const currentParentClassList = e.target.parentElement.classList;
-        if (currentParentClassList.contains("keyboard-key__disabled")) {
-          return;
-        }
+        if (currentParentClassList.contains("keyboard-key__disabled")) return;
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
       this.keyHover = true;
       let { top, left } = getVertexPosition(e.target);
@@ -413,13 +411,13 @@ export default {
 
     &__item {
       position: relative;
-      flex: 0 0 70px;
-      margin-right: 10px;
-      height: 90px;
+      flex: 0 0 9.333vw;
+      margin-right: 1.333vw;
+      height: 12vw;
       border: 1px solid #dedede;
-      line-height: 88px;
+      line-height: 11.733vw;
       text-align: center;
-      font-size: 36px;
+      font-size: 4.8vw;
       box-sizing: border-box;
       background-color: #fff;
 
@@ -431,14 +429,14 @@ export default {
       border: 1px solid #37d868;
       &--icon {
         position: absolute;
-        left: -2px;
-        top: -12px;
+        left: -0.267vw;
+        top: -1.6vw;
         right: 0;
         margin: auto;
-        width: 64px;
-        height: 28px;
+        width: 8.533vw;
+        height: 3.733vw;
         background: url("https://cabin-cdn.oss-cn-hangzhou.aliyuncs.com/img/energy-icon.png")
-          no-repeat center/64px 28px;
+          no-repeat center/8.533vw 3.733vw;
         z-index: 10;
       }
     }
@@ -446,7 +444,7 @@ export default {
       color: #3092ff;
       background-color: #fff;
       background-image: url("https://cabin-cdn.oss-cn-hangzhou.aliyuncs.com/img/inp-active.png");
-      background-position: center 74px;
+      background-position: center 9.867vw;
       background-repeat: no-repeat;
     }
     .ignore-height {
@@ -456,16 +454,16 @@ export default {
     &__content {
       background-color: #fff;
       background-image: none;
-      border-radius: 4px;
+      border-radius: 0.533vw;
       border: 1px solid #dcdfe6;
       box-sizing: border-box;
       color: #606266;
       display: inline-block;
       font-size: inherit;
-      height: 50px;
-      line-height: 50px;
+      height: 6.667vw;
+      line-height: 6.667vw;
       outline: none;
-      padding: 0 15px;
+      padding: 0 2vw;
       transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
       width: 100%;
       &:focus {
@@ -484,7 +482,7 @@ export default {
     z-index: 100;
     user-select: none;
     text-align: center;
-    box-shadow: 0 -1px 2px #e9e9e9;
+    box-shadow: 0 -1px 0.267vw #e9e9e9;
   }
   &-bar {
     font-size: 0;
@@ -493,14 +491,14 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 40px;
+    padding: 0 5.333vw;
 
     &__close {
-      $iconWidth: 28px;
-      $iconHeight: 4px;
+      $iconWidth: 3.733vw;
+      $iconHeight: 0.533vw;
 
-      height: 90px;
-      line-height: 90px;
+      height: 12vw;
+      line-height: 12vw;
       display: flex;
       align-items: center;
 
@@ -512,7 +510,7 @@ export default {
         background: #3092ff;
         transform: rotate(45deg);
         position: relative;
-        margin-right: 10px;
+        margin-right: 1.333vw;
 
         &::after {
           content: "";
@@ -525,24 +523,24 @@ export default {
         }
       }
       &--label {
-        height: 90px;
-        line-height: 90px;
-        font-size: 24px;
+        height: 12vw;
+        line-height: 12vw;
+        font-size: 3.2vw;
         display: inline-block;
         vertical-align: middle;
       }
     }
 
     &__switch {
-      height: 90px;
+      height: 12vw;
       display: flex;
       align-items: center;
 
       &--label {
-        height: 90px;
-        line-height: 90px;
-        font-size: 24px;
-        margin-right: 10px;
+        height: 12vw;
+        line-height: 12vw;
+        font-size: 3.2vw;
+        margin-right: 1.333vw;
         display: inline-block;
         vertical-align: middle;
       }
@@ -551,30 +549,30 @@ export default {
   &-row {
     display: flex;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 2vw;
   }
   &-prefix,
   &-suffix {
-    padding: 26px 8px 16px;
+    padding: 3.467vw 1.067vw 2.133vw;
     margin: 0 auto;
     text-align: center;
   }
   &-key {
     flex: 1;
-    margin-right: 10px;
+    margin-right: 1.333vw;
     font-size: 0;
-    border-radius: 12px;
+    border-radius: 1.6vw;
 
     &__txt {
       display: inline-block;
       user-select: none;
       width: 100%;
-      line-height: 90px;
-      font-size: 36px;
+      line-height: 12vw;
+      font-size: 4.8vw;
       color: #0b0b0b;
-      box-shadow: 0 2px 2px #d7d7d7;
+      box-shadow: 0 0.267vw 0.267vw #d7d7d7;
       background-color: #fff;
-      border-radius: 12px;
+      border-radius: 1.6vw;
       z-index: 50;
       font-family: "PingFangSC-Regular", serif;
     }
@@ -585,11 +583,11 @@ export default {
     }
     &__del {
       .keyboard-key__txt {
-        height: 90px;
+        height: 12vw;
         background: #fff
           url("https://cabin-cdn.oss-cn-hangzhou.aliyuncs.com/img/del-icon.png")
           no-repeat 50%;
-        background-size: 45px;
+        background-size: 6vw;
       }
     }
     &__disabled {
@@ -600,14 +598,14 @@ export default {
     }
     &__hover {
       position: fixed;
-      width: 70px;
-      height: 90px;
-      line-height: 90px;
+      width: 9.333vw;
+      height: 12vw;
+      line-height: 12vw;
       transform: translate(-50%, -100%);
       text-align: center;
-      font-size: 40px;
+      font-size: 5.333vw;
       color: #3092ff;
-      box-shadow: 0 -2px 4px #e9e9e9;
+      box-shadow: 0 -0.267vw 0.533vw #e9e9e9;
       z-index: 50;
       background: transparent
         url("https://cabin-cdn.oss-cn-hangzhou.aliyuncs.com/img/key-tip.png")
@@ -618,17 +616,18 @@ export default {
       margin-right: 0;
     }
   }
+
   &-switch {
-    $switchWidth: 70px;
-    $switchCheckWidth: 32px;
+    $switchWidth: 9.333vw;
+    $switchCheckWidth: 4vw;
     vertical-align: middle;
     width: $switchWidth;
-    height: 34px;
+    height: 4.533vw;
     position: relative;
     border: 1px solid #dfdfdf;
     background-color: #fdfdfd;
     box-shadow: #dfdfdf 0 0 0 0 inset;
-    border-radius: 20px;
+    border-radius: 2.667vw;
     background-clip: content-box;
     display: inline-block;
     -webkit-appearance: none;
@@ -644,11 +643,11 @@ export default {
       left: 0;
       border-radius: 50%;
       background-color: #fff;
-      box-shadow: 0 2px 4px 1px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 0.267vw 0.533vw 1px rgb(0 0 0 / 30%);
     }
     &:checked {
       border-color: #64bd63;
-      box-shadow: #64bd63 0 0 0 10px inset;
+      box-shadow: #64bd63 0 0 0 1.333vw inset;
       background-color: #64bd63;
     }
     &:checked::before {

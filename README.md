@@ -8,7 +8,6 @@
 yarn add input-plate-number  / npm install input-plate-number / pnpm install input-plate-number
 ```
 
-
 ## 使用
 > 因为是基于 `Vue2.x` 开发的组件库，所以只支持在 `Vue2.x` 项目中使用
 

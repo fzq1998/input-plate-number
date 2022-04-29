@@ -10,19 +10,12 @@
       :default-plate-number="defaultPlateNumber"
       v-model="plateNum"
       :energy.sync="isEnergy"
-      :key="defaultPlateNumberKey"
       wrap-class="box"
-    ></input-plate-number>
-
+    />
     plateNum: {{ plateNum }} <br />
     <button @click="keyboardVisible = false">关闭自定义键盘</button>
     <button @click="keyboardVisible = true">打开自定义键盘</button>
-    <button
-      @click="
-        defaultPlateNumber = '浙E';
-        defaultPlateNumberKey++;
-      "
-    >
+    <button @click="defaultPlateNumber = '浙E'">
       更改默认键盘
     </button>
   </div>
@@ -35,7 +28,6 @@ export default {
     return {
       isEnergy: false,
       defaultPlateNumber: "浙B",
-      defaultPlateNumberKey: 1,
       keyboardVisible: true,
       plateNum: ""
     };
@@ -62,11 +54,8 @@ export default {
     }
   },
   created() {
-    // this.defaultPlateNumber = "沪A";
     setTimeout(() => {
       this.updateDefaultPlateNumber();
-      // this.isEnergy = true;
-      // this.defaultPlateNumberKey++;
     }, 1500);
   }
 };
@@ -75,9 +64,5 @@ export default {
 <style>
 body {
   margin: 0;
-}
-.box {
-  padding: 20px;
-  background-color: #fff;
 }
 </style>

@@ -16,9 +16,7 @@
   "keywords": ["车牌输入", "keyboard", "plate component", "vue 车牌输入"],
   "dependencies": {
     "core-js": "^3.6.5",
-    "vue": "^2.6.11",
-    "postcss-px-to-viewport": "^1.1.1",
-    "postcss-viewport-units": "^0.1.6"
+    "vue": "^2.6.11"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.4.0",
