@@ -290,6 +290,7 @@ export default {
     },
     handleEnergyChange() {
       this.$emit("update:energy", this.isEnergy);
+      this.$emit("change-energy", this.isEnergy)
     },
     handleKeyTouchStart(key, e) {
       if (!this.canKeyClick) {
