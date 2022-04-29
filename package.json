@@ -13,15 +13,7 @@
     "lint": "vue-cli-service lint",
     "build-lib": "vue-cli-service build --target lib --name input-plate-number --dest lib packages/index.js"
   },
-  "keywords": [
-    "车牌输入组件",
-    "keyboard",
-    "vue",
-    "frontend",
-    "移动端mobile ui",
-    "component",
-    "components"
-  ],
+  "keywords": ["车牌输入", "keyboard", "plate component", "vue 车牌输入"],
   "dependencies": {
     "core-js": "^3.6.5",
     "vue": "^2.6.11",
