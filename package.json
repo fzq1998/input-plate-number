@@ -1,6 +1,6 @@
 {
   "name": "input-plate-number",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "基于 Vue 的移动端输入车牌组件",
   "main": "lib/input-plate-number.common.js",
   "author": "handsomeFu",
